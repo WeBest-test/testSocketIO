@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./node_modules/.bin/supervisor ./bin/www"
+    "start": "start.bat"
   },
   "dependencies": {
     "body-parser": "~1.15.1",
@@ -16,6 +16,7 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "opn": "^4.0.2",
     "supervisor": "^0.11.0"
   }
 }
