@@ -21,13 +21,16 @@ http://socket.io/get-started/chat/
 <body>
 <ul id="messages"></ul>
 <form action="">
-    <input id="m" autocomplete="off" /><button type="button">Send</button>
+    <input id="m" autocomplete="off" /><button type="submit">Send</button>
 </form>
 <script>
     var socket = io();
-    $('button').click(function(){
+    $('form').submit(function(e){
+        e.preventDefault();
+        if(!$('#m').val()) return;
         socket.emit('chatname', $('#m').val()); //the event name is 'chatname'
         $('#m').val('');
+        return false;
     });
     socket.on('chatname', function(msg){ //if the browser received a 'chatname'
         $('#messages').append($('<li>').text(msg)); //append to DOM
