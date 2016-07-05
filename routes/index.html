@@ -26,8 +26,11 @@ http://socket.io/get-started/chat/
 <script>
     var socket = io();
     $('button').click(function(){
-        socket.emit('chat message', $('#m').val());
+        socket.emit('chatname', $('#m').val()); //the event name is 'chatname'
         $('#m').val('');
+    });
+    socket.on('chatname', function(msg){ //if the browser received a 'chatname'
+        $('#messages').append($('<li>').text(msg)); //append to DOM
     });
 </script>
 </body>

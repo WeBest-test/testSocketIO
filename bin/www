@@ -30,8 +30,9 @@ var server = http.createServer(app);
 var io = require('socket.io')(server);
 io.on('connection', function(socket){
   //console.log(socket);
-  socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
+  socket.on('chatname', function(msg){ //the event name is chatname
+    console.log('message: ' + msg); //log the msg client send
+    io.emit('chatname', msg); // send one msg to all clients
   });
 });
 
