@@ -15,11 +15,20 @@ http://socket.io/get-started/chat/
         #messages li { padding: 5px 10px; }
         #messages li:nth-child(odd) { background: #eee; }
     </style>
+    <script src="/javascripts/socketio-1.4.8.js"></script>
+    <script src="/javascripts/jquery-1.10.2.js"></script>
 </head>
 <body>
 <ul id="messages"></ul>
 <form action="">
-    <input id="m" autocomplete="off" /><button>Send</button>
+    <input id="m" autocomplete="off" /><button type="button">Send</button>
 </form>
+<script>
+    var socket = io();
+    $('button').click(function(){
+        socket.emit('chat message', $('#m').val());
+        $('#m').val('');
+    });
+</script>
 </body>
 </html>
