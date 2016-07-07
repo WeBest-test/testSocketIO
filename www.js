@@ -32,7 +32,7 @@ io.on('connection', function(socket){
   
   
   //calculate encrypt salt.
-  var tmpNum = parseInt(Date.now()/(300000)); //a tmp num changed every day.
+  var tmpNum = parseInt(Date.now()/(3600000*24)); //a tmp num changed every day.
   var crypto = require('crypto');
   var hash = crypto.createHash('sha256');
   hash.update(tmpNum+'ankdsksa');

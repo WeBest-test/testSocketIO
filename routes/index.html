@@ -25,7 +25,7 @@ http://socket.io/get-started/chat/
     <input id="m" autocomplete="off" /><button type="submit">Send</button>
 </form>
 <script>
-    var socket = io();
+    var socket = io('http://111.206.45.12:30182/');
     $('form').submit(function(e){
         e.preventDefault();
         if(!$('#m').val()) return;
