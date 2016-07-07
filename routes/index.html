@@ -13,6 +13,9 @@ http://socket.io/get-started/chat/
             height:100%;
         }
         body { font: 13px Helvetica, Arial; }
+        .wrap{
+            overflow: scroll;
+        }
         form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
         form input { border: 0; padding: 10px; width: 80%; margin-right: .5%; }
         form button { width: 18%; background: rgb(130, 224, 255); border: none; padding: 10px; }
@@ -25,7 +28,10 @@ http://socket.io/get-started/chat/
     <script src="https://staticfile.qnssl.com/crypto-js/3.1.2/rollups/aes.js"></script>
 </head>
 <body>
-<ul id="messages"></ul>
+<div class="wrap">
+    <ul id="messages"></ul>   
+</div>
+
 <form action="">
     <input id="m" autocomplete="off" /><button type="submit">Send</button>
 </form>
@@ -39,8 +45,17 @@ http://socket.io/get-started/chat/
         $('#m').val('');
         return false;
     });
+    
+    //cache dom
+    $wrap = $('.wrap');
+    
     socket.on('chatname', function(msg){ //if the browser received a 'chatname'
         $('#messages').append($('<li>').text(salt?decrypt(msg,salt):msg)); //append to DOM
+        if($('ul').height()>= $wrap.height()){
+            $('ul li:first').remove();
+        }
+        /*var $lastli = $('ul li:last');
+        $wrap.animate({scrollTop:$lastli.offset().top},500);*/
     });
 
     socket.on('salt', function(msg){ //if the browser received a salt
@@ -60,6 +75,9 @@ http://socket.io/get-started/chat/
         var decryptedData = bytes.toString(CryptoJS.enc.Utf8);
         return decryptedData;
     }
+    $('.wrap').height($('body').height()-$('form').outerHeight());
+    
+    
     
 </script>
 </body>
