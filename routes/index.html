@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+<!--
+http://socket.io/get-started/chat/
+-->
+<head>
+    <title>Socket.IO chat</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font: 13px Helvetica, Arial; }
+        form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
+        #messages { list-style-type: none; margin: 0; padding: 0; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #eee; }
+    </style>
+    <script src="/javascripts/socketio-1.4.8.js"></script>
+    <script src="/javascripts/jquery-1.10.2.js"></script>
+    <script src="https://staticfile.qnssl.com/crypto-js/3.1.2/rollups/aes.js"></script>
+</head>
+<body>
+<ul id="messages"></ul>
+<form action="">
+    <input id="m" autocomplete="off" /><button type="submit">Send</button>
+</form>
+<script>
+    var socket = io();
+    $('form').submit(function(e){
+        e.preventDefault();
+        if(!$('#m').val()) return;
+        
+        socket.emit('chatname', salt?encrypt($('#m').val()):$('#m').val()); //the event name is 'chatname'
+        $('#m').val('');
+        return false;
+    });
+    socket.on('chatname', function(msg){ //if the browser received a 'chatname'
+        $('#messages').append($('<li>').text(salt?decrypt(msg,salt):msg)); //append to DOM
+    });
+
+    socket.on('salt', function(msg){ //if the browser received a salt
+        salt = msg;
+        console.log('salt is')
+        console.log(msg)
+    });
+    
+    //test encrypt
+    var salt = '';
+    function encrypt(msg) {
+        var ciphertext = CryptoJS.AES.encrypt(msg,salt).toString();
+        return ciphertext;
+    }
+    function decrypt(ciphertext,salt) {
+        var bytes  = CryptoJS.AES.decrypt(ciphertext, salt);
+        var decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+        return decryptedData;
+    }
+    
+</script>
+</body>
+</html>
