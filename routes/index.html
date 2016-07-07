@@ -17,6 +17,7 @@ http://socket.io/get-started/chat/
     </style>
     <script src="/javascripts/socketio-1.4.8.js"></script>
     <script src="/javascripts/jquery-1.10.2.js"></script>
+    <script src="https://staticfile.qnssl.com/crypto-js/3.1.2/rollups/aes.js"></script>
 </head>
 <body>
 <ul id="messages"></ul>
@@ -28,13 +29,33 @@ http://socket.io/get-started/chat/
     $('form').submit(function(e){
         e.preventDefault();
         if(!$('#m').val()) return;
-        socket.emit('chatname', $('#m').val()); //the event name is 'chatname'
+        
+        socket.emit('chatname', salt?encrypt($('#m').val()):$('#m').val()); //the event name is 'chatname'
         $('#m').val('');
         return false;
     });
     socket.on('chatname', function(msg){ //if the browser received a 'chatname'
-        $('#messages').append($('<li>').text(msg)); //append to DOM
+        $('#messages').append($('<li>').text(salt?decrypt(msg,salt):msg)); //append to DOM
     });
+
+    socket.on('salt', function(msg){ //if the browser received a salt
+        salt = msg;
+        console.log('salt is')
+        console.log(msg)
+    });
+    
+    //test encrypt
+    var salt = '';
+    function encrypt(msg) {
+        var ciphertext = CryptoJS.AES.encrypt(msg,salt).toString();
+        return ciphertext;
+    }
+    function decrypt(ciphertext,salt) {
+        var bytes  = CryptoJS.AES.decrypt(ciphertext, salt);
+        var decryptedData = bytes.toString(CryptoJS.enc.Utf8);
+        return decryptedData;
+    }
+    
 </script>
 </body>
 </html>

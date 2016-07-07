@@ -29,7 +29,21 @@ var server = http.createServer(app);
  */
 var io = require('socket.io')(server);
 io.on('connection', function(socket){
-  //console.log(socket);
+  
+  
+  //calculate encrypt salt.
+  var tmpNum = parseInt(Date.now()/(300000)); //a tmp num changed every day.
+  var crypto = require('crypto');
+  var hash = crypto.createHash('sha256');
+  hash.update(tmpNum+'ankdsksa');
+  
+  var encSalt = hash.digest('hex');//salt
+  
+  
+  io.emit('salt',encSalt);
+  
+  
+
   socket.on('chatname', function(msg){ //the event name is chatname
     console.log('message: ' + msg); //log the msg client send
     io.emit('chatname', msg); // send one msg to all clients
