@@ -4,10 +4,10 @@
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('./app');
 var debug = require('debug')('testSocketIO:server');
 var http = require('http');
-var open = require('opn');
+//var open = require('opn');
 
 
 /**
@@ -117,5 +117,4 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  open('http://127.0.0.1:'+port);
 }
